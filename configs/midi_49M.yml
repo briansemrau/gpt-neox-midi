@@ -15,9 +15,11 @@
   "gpt-j-residual": true,
   "output-layer-parallelism": "column",
 
+  "attention-config": [[["flash"], 10]],
+
   # these should provide some speedup but takes a while to build, set to true if desired
-  "scaled-upper-triang-masked-softmax-fusion": false,
-  "bias-gelu-fusion": false,
+  "scaled-upper-triang-masked-softmax-fusion": true,
+  "bias-gelu-fusion": true,
 
   # init methods
   "init_method": "small_init",
@@ -37,12 +39,13 @@
   # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
   "zero_optimization": {
     "stage": 1,
-    "allgather_partitions": True,
+    "allgather_partitions": true,
     "allgather_bucket_size": 500000000,
-    "overlap_comm": True,
-    "reduce_scatter": True,
+    "overlap_comm": true,
+    "reduce_scatter": true,
     "reduce_bucket_size": 500000000,
-    "contiguous_gradients": True,
+    "contiguous_gradients": true,
+    "cpu_offload": false
   },
 
   # batch / data settings
@@ -71,7 +74,7 @@
     "loss_scale_window": 1000,
     "initial_scale_power": 12,
     "hysteresis": 2,
-    "min_loss_scale": 1,
+    "min_loss_scale": 1
   },
 
   # misc. training settings
@@ -81,7 +84,7 @@
   "lr-decay-style": "cosine",
   "warmup": 0.01,
   "checkpoint-factor": 1000,
-  "eval-interval": 100000,
+  "eval-interval": 1000,
   "eval-iters": 10,
 
   # logging
@@ -89,5 +92,5 @@
   "steps_per_print": 10,
   "wall_clock_breakdown": true,
 
-  "tokenizer_type": "OoreMidiTokenizer",
+  "tokenizer-type": "OoreMidiTokenizer",
 }

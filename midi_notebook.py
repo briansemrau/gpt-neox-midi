@@ -32,16 +32,17 @@ gen_tokens = model.generate(
 
     temperature=0.9,
     
-    #typical_p=0.2,
+    typical_p=0.2,
+    repetition_penalty=1.2,
     
-    penalty_alpha=0.6,
-    top_k=4,
+    #penalty_alpha=0.6,
+    #top_k=4,
     
-    max_length=512,
+    max_length=2048,
 )[0]
 
 if input_ids is not None:
-    all_tokens = list(input_ids) + list(gen_tokens)
+    all_tokens = list(input_ids[0]) + list(gen_tokens)
 else:
     all_tokens = list(gen_tokens)
 

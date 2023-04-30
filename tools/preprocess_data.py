@@ -37,7 +37,7 @@ from megatron.tokenizer import build_tokenizer
 from megatron.data import indexed_dataset
 from threading import Semaphore
 
-from megatron.tokenizer.tokenizer import OoreMidiTokenizer
+from midi.tokenizer_tools import encode_bytes_to_utf8_str
 import gzip
 
 
@@ -147,7 +147,7 @@ def get_args():
 class MidiReader(lmd.Reader):
     def read_tgz(self, file):
         gz = gzip.open(file)
-        yield from (OoreMidiTokenizer.encode_bytes_to_utf8_str(x) for x in lmd.tarfile_reader(gz, streaming=False))
+        yield from (encode_bytes_to_utf8_str(x) for x in lmd.tarfile_reader(gz, streaming=False))
 
 
 def yield_from_files(fnames: list, semaphore):

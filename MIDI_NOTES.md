@@ -2,7 +2,6 @@
 # Intro
 
 I was able to do this on a desktop machine equipped with an AMD 7900X, 32GB RAM, and an RTX 3090.
-Data preparation takes some time
 
 # Setup GPT-NeoX
 
