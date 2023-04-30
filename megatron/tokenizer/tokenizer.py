@@ -27,6 +27,12 @@ import sentencepiece as spm
 from typing import List, Union
 from .gpt2_tokenization import GPT2Tokenizer
 
+from midi import vocabulary as midi_vocab
+from midi.tokenizer import midi_encode, midi_decode
+from midi.tokenizer_tools import encode_bytes_to_utf8_str, decode_str_to_bytes
+import mido
+import io
+import numpy as np
 
 def build_tokenizer(args):
     """Initialize tokenizer."""
@@ -55,6 +61,8 @@ def build_tokenizer(args):
     elif args.tokenizer_type.lower() == "TiktokenTokenizer".lower():
         assert args.vocab_file is not None
         tokenizer = TiktokenTokenizer(args.vocab_file)
+    elif args.tokenizer_type.lower() == "OoreMidiTokenizer".lower():
+        tokenizer = OoreMidiTokenizer()
     else:
         raise NotImplementedError(
             "{} tokenizer is not " "implemented.".format(args.tokenizer_type)
@@ -349,6 +357,51 @@ class CharLevelTokenizer(AbstractTokenizer):
     def eod(self):
         return self.eod_id
 
+class OoreMidiTokenizer(AbstractTokenizer):
+    """Oore et. al. Midi Tokenizer"""
+
+    def __init__(self):
+        name = "OoreMidiTokenizer"
+        super().__init__(name)
+        self._vocab_size = midi_vocab.vocab_size
+        self.eod_id = midi_vocab.end_token
+        self.pad_id = midi_vocab.pad_token
+
+    @property
+    def vocab_size(self):
+        return self._vocab_size
+
+    @property
+    def vocab(self):
+        raise NotImplementedError
+
+    @property
+    def inv_vocab(self):
+        raise NotImplementedError
+
+    def tokenize(self, text: str):
+        bytes = decode_str_to_bytes(text)
+        try:
+            mobj = mido.MidiFile(file=io.BytesIO(bytes))
+            return midi_encode(mid=mobj)[0].tolist()
+        except Exception as e:
+            #print(e)
+            return []
+
+    def tokenize_batch(self, text_batch: Union[List[str], str]):
+        if isinstance(text_batch, list):
+            return [self.tokenize(s) for s in text_batch]
+        else:
+            return self.tokenize(text_batch)
+
+    def detokenize(self, token_ids):
+        bytes = io.BytesIO()
+        midi_decode(token_ids).save(file=bytes)
+        return encode_bytes_to_utf8_str(bytes.getvalue())
+
+    @property
+    def eod(self):
+        return self.eod_id
 
 class TiktokenTokenizer(AbstractTokenizer):
     """Tokenizer from OpenAI's tiktoken implementation"""

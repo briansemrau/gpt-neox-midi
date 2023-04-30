@@ -1,6 +1,6 @@
 # Suggested data paths when using GPT-NeoX locally
 {
-  "data-path": "data/enwik8/enwik8_text_document",
+  "data-path": "/mnt/e/datasets/music/lakh_midi_v0.1/tokenized/lmd_full_midi_document",
 
   # or for weighted datasets:
   # "train-data-paths": ["data/enwik8/enwik8_text_document", "data/enwik8/enwik8_text_document"],
@@ -15,16 +15,15 @@
   # "weight_by_num_documents": false,
   # "weighted_sampler_alpha": 0.3,
 
-  "vocab-file": "data/gpt2-vocab.json",
-  "merge-file": "data/gpt2-merges.txt",
+  "tokenizer_type": "OoreMidiTokenizer",
 
-  "save": "checkpoints",
-  "load": "checkpoints",
+  "save": "/mnt/e/models/music/neox-oore-lmd-19M",
+  "load": "/mnt/e/models/music/neox-oore-lmd-19M",
   "checkpoint_validation_with_forward_pass": False,
 
-  "tensorboard-dir": "tensorboard",
+  #"tensorboard-dir": "tensorboard",
   "log-dir": "logs",
   "use_wandb": True,
   "wandb_host": "https://api.wandb.ai",
-  "wandb_project": "neox"
+  "wandb_project": "neox-midi-oore"
 }

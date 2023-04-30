@@ -661,6 +661,7 @@ class NeoXArgsTokenizer(NeoXArgsTemplate):
         "SPMTokenizer",
         "CharLevelTokenizer",
         "TiktokenTokenizer",
+        "OoreMidiTokenizer",
     ] = "GPT2BPETokenizer"
     """
     Type of tokenizer to use - should be one of ["GPT2BPETokenizer", "HFTokenizer", "HFGPT2Tokenizer", "SPMTokenizer", "CharLevelTokenizer", "TiktokenTokenizer"]

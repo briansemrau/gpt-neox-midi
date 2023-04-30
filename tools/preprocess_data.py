@@ -37,6 +37,9 @@ from megatron.tokenizer import build_tokenizer
 from megatron.data import indexed_dataset
 from threading import Semaphore
 
+from megatron.tokenizer.tokenizer import OoreMidiTokenizer
+import gzip
+
 
 class Encoder(object):
     def __init__(self, args):
@@ -72,12 +75,6 @@ def get_args():
         "list",
     )
     group.add_argument(
-        "--jsonl-keys",
-        nargs="+",
-        default=["text"],
-        help="space separate listed of keys to extract from jsonl. Defa",
-    )
-    group.add_argument(
         "--num-docs",
         default=None,
         help="Optional: Number of documents in the input data (if known) for an accurate progress bar.",
@@ -87,13 +84,9 @@ def get_args():
     group.add_argument(
         "--tokenizer-type",
         type=str,
-        required=True,
+        default="OoreMidiTokenizer",
         choices=[
-            "HFGPT2Tokenizer",
-            "HFTokenizer",
-            "GPT2BPETokenizer",
-            "CharLevelTokenizer",
-            "TiktokenTokenizer",
+            "OoreMidiTokenizer",
         ],
         help="What type of tokenizer to use.",
     )
@@ -144,8 +137,17 @@ def get_args():
     args.rank = 0
     args.make_vocab_size_divisible_by = 128
     args.model_parallel_size = 1
+    args.ftfy = False
+    args.jsonl_keys = ["midi"]
+    args.tokenizer_type = "OoreMidiTokenizer"
 
     return args
+
+
+class MidiReader(lmd.Reader):
+    def read_tgz(self, file):
+        gz = gzip.open(file)
+        yield from (OoreMidiTokenizer.encode_bytes_to_utf8_str(x) for x in lmd.tarfile_reader(gz, streaming=False))
 
 
 def yield_from_files(fnames: list, semaphore):
@@ -157,7 +159,7 @@ def yield_from_files(fnames: list, semaphore):
     """
 
     def yielder(fname, semaphore):
-        for f in filter(lambda x: x, lmd.Reader(fname).stream_data()):
+        for f in filter(lambda x: x, MidiReader(fname).stream_data()):
             semaphore.acquire()
             yield f
 

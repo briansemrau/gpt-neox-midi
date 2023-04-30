@@ -1,3 +1,14 @@
+
+# GPT-NeoX MIDI
+
+This is a fork of [EleutherAI/gpt-neox](https://github.com/EleutherAI/gpt-neox) for training LLMs on MIDI.
+
+There is a pre-existing project [spectraldoy/music-transformer](https://github.com/spectraldoy/music-transformer) that trained small attention models on very limited MIDI data. I had difficulties getting it to work, so I adapted NeoX to use the tokenization work from music transformer.
+
+See [MIDI_NOTES.md](./MIDI_NOTES.md) for details on how to get started.
+
+---
+
 [![GitHub issues](https://img.shields.io/github/issues/EleutherAI/gpt-neox)](https://github.com/EleutherAI/gpt-neox/issues)
 [<img src="https://raw.githubusercontent.com/wandb/assets/main/wandb-github-badge-28.svg" alt="Weights & Biases monitoring" height=20>](https://wandb.ai/eleutherai/neox)
 

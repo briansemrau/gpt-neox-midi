@@ -82,6 +82,8 @@
   "steps_per_print": 10,
   "wall_clock_breakdown": true,
 
+  "tokenizer_type": "OoreMidiTokenizer",
+
   # additional deepspeed args not specified above
   "deepspeed_extra_args": {
     "comms_logger": {
