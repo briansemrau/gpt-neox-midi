@@ -15,10 +15,8 @@
   # "weight_by_num_documents": false,
   # "weighted_sampler_alpha": 0.3,
 
-  "tokenizer_type": "OoreMidiTokenizer",
-
-  "save": "/mnt/e/models/music/neox-oore-lmd-19M",
-  "load": "/mnt/e/models/music/neox-oore-lmd-19M",
+  "save": "/mnt/e/models/music/neox-oore-lmd-49M",
+  "load": "/mnt/e/models/music/neox-oore-lmd-49M",
   "checkpoint_validation_with_forward_pass": False,
 
   #"tensorboard-dir": "tensorboard",

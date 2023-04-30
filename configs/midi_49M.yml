@@ -1,18 +1,21 @@
 {
+  # parallelism settings
   "pipe-parallel-size": 1,
   "model-parallel-size": 1,
 
   # model settings
-  "num-layers": 6,
-  "hidden-size": 512,
-  "num-attention-heads": 8,
+  "num-layers": 10,
+  "hidden-size": 640,
+  "num-attention-heads": 10,
   "seq-length": 2048,
   "max-position-embeddings": 2048,
   "pos-emb": "rotary",
+  "rotary-pct": 0.25,
   "no-weight-tying": true,
-  "gpt-j-residual": false,
+  "gpt-j-residual": true,
   "output-layer-parallelism": "column",
 
+  # these should provide some speedup but takes a while to build, set to true if desired
   "scaled-upper-triang-masked-softmax-fusion": false,
   "bias-gelu-fusion": false,
 
@@ -20,15 +23,16 @@
   "init_method": "small_init",
   "output_layer_init_method": "wang_init",
 
+  # optimizer settings
   "optimizer": {
     "type": "Adam",
     "params": {
-      "lr": 0.001,
+      "lr": 0.0008,
       "betas": [0.9, 0.95],
       "eps": 1.0e-8,
     }
   },
-  "min_lr": 0.0001,
+  "min_lr": 0.00008,
 
   # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
   "zero_optimization": {
@@ -41,7 +45,8 @@
     "contiguous_gradients": True,
   },
 
-  "train_micro_batch_size_per_gpu": 4, #32,
+  # batch / data settings
+  "train_micro_batch_size_per_gpu": 32,
   "gas": 1,
   "data-impl": "mmap",
   "num_workers": 1,
@@ -69,6 +74,7 @@
     "min_loss_scale": 1,
   },
 
+  # misc. training settings
   "train-iters": 143000,
   "lr-decay-iters": 143000,
   "distributed-backend": "nccl",
@@ -78,18 +84,10 @@
   "eval-interval": 100000,
   "eval-iters": 10,
 
+  # logging
   "log-interval": 10,
   "steps_per_print": 10,
   "wall_clock_breakdown": true,
 
-  # additional deepspeed args not specified above
-  "deepspeed_extra_args": {
-    "comms_logger": {
-        "enabled": true,
-        "verbose": true,
-        "prof_all": true,
-        "debug": false
-    },
-  }
-
+  "tokenizer_type": "OoreMidiTokenizer",
 }

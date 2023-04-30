@@ -78,7 +78,7 @@ Update [local_setup.yml](./local_setup.yml) to make sure the data paths are corr
 
 ```sh
 source venv/bin/activate
-python ./deepy.py train.py -d configs 19M.yml local_setup.yml
+python ./deepy.py train.py -d configs midi_19M.yml local_setup.yml
 ```
 
 convert to HF transformers
@@ -86,9 +86,7 @@ convert to HF transformers
 ```sh
 MODEL_DIR=/mnt/e/models/music/neox-oore-lmd-19M
 
-python ./tools/convert_sequential_to_hf.py --input_dir $MODEL_DIR/$(cat $MODEL_DIR/latest) --config_file configs/19M.yml --output_dir $MODEL_DIR/hf_model/
-
-python  ./tools/convert_v1.0_to_hf.py --input_dir $MODEL_DIR/$(cat $MODEL_DIR/latest) --config_file configs/19M.yml --output_dir $MODEL_DIR/hf_model/
+python  ./tools/convert_v1.0_to_hf.py --input_dir $MODEL_DIR/$(cat $MODEL_DIR/latest) --config_file configs/midi_19M.yml --output_dir $MODEL_DIR/hf_model/
 ```
 
 upload to HF
@@ -97,3 +95,7 @@ upload to HF
 huggingface-cli login
 python ./tools/upload.py
 ```
+
+# inference
+
+[midi_notebook.py](./midi_notebook.py)
