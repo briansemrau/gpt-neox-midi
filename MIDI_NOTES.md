@@ -17,7 +17,9 @@ pip install -r requirements-wandb.txt
 pip install -r requirements-tensorboard.txt
 ```
 
-# Download Lakh Midi dataset
+# Download dataset
+
+## Lakh Midi v0.1
 
 https://colinraffel.com/projects/lmd/
 
@@ -26,6 +28,10 @@ DATA_DIR=/mnt/e/datasets/music/lakh_midi_v0.1
 
 curl http://hog.ee.columbia.edu/craffel/lmd/lmd_full.tar.gz -o lmd_full.tar.gz
 ```
+
+## Maestro v3.0.0
+
+https://magenta.tensorflow.org/datasets/maestro
 
 <!-- (optionally, but recommended) split into parts to avoid memory issues when tokenizing
 
@@ -50,11 +56,17 @@ if you don't want to split the dataset, it's easiest to just do this:
 mkdir $DATA_DIR/parts
 mv $DATA_DIR/lmd_full.tar.gz $DATA_DIR/parts/lmd_full-part0.tar.gz
 ``` -->
+# Augment data
+(optional)
+
+```sh
+python ./midi/augment_data.py --input $DATA_DIR/maestro-v3.0.0-midi.zip --output $DATA_DIR/augmented/maestro_aug --workers $(nproc) --transpose="-2,-1,0,1,2,3" --time-stretch="-0.05,-0.025,0.0,0.025,0.05"
+```
 
 # Tokenize
 
-I only modified GPT-NeoX to handle .tar.gz archives of midi files.
-Modify [MidiReader](./tools/preprocess_data.py#L147) to add more file types.
+I only modified GPT-NeoX to handle .tar.gz and .zip archives of midi files.
+Modify [MidiReader](./tools/preprocess_data.py#L148) to add more file types.
 
 <!-- ```sh
 source venv/bin/activate
@@ -85,7 +97,7 @@ convert to HF transformers
 ```sh
 MODEL_DIR=/mnt/e/models/music/neox-oore-lmd-19M
 
-python  ./tools/convert_v1.0_to_hf.py --input_dir $MODEL_DIR/$(cat $MODEL_DIR/latest) --config_file configs/midi_19M.yml --output_dir $MODEL_DIR/hf_model/
+python ./tools/convert_v1.0_to_hf.py --input_dir $MODEL_DIR/$(cat $MODEL_DIR/latest) --config_file configs/midi_19M.yml --output_dir $MODEL_DIR/hf_model/
 ```
 
 upload to HF

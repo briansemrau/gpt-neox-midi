@@ -39,17 +39,18 @@ gen_tokens = model.generate(
     #top_k=4,
     
     max_length=2048,
-)[0]
+)[0].to("cpu")
 
-if input_ids is not None:
-    all_tokens = list(input_ids[0]) + list(gen_tokens)
-else:
-    all_tokens = list(gen_tokens)
+#if input_ids is not None:
+#    all_tokens = list(input_ids[0]) + list(gen_tokens)
+#else:
+all_tokens = list(gen_tokens)
 
 tempo = 512820
 if prompt_mido is not None:
     tempo = prompt_mido.ticks_per_beat
 
-output_file = "output.mid"
+if prompt_filename is not None:
+    output_file = os.path.splitext(prompt_filename)[0] + "_" + output_file
 gen_mido = midi_decode(index_list=all_tokens, fname=output_file)
 gen_mido.save(os.path.join(cwd, output_file))

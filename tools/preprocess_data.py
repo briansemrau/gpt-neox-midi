@@ -39,6 +39,7 @@ from threading import Semaphore
 
 from midi.tokenizer_tools import encode_bytes_to_utf8_str
 import gzip
+from zipfile import ZipFile
 
 
 class Encoder(object):
@@ -148,6 +149,10 @@ class MidiReader(lmd.Reader):
     def read_tgz(self, file):
         gz = gzip.open(file)
         yield from (encode_bytes_to_utf8_str(x) for x in lmd.tarfile_reader(gz, streaming=False))
+    def read_zip(self, file):
+        archive = ZipFile(file, 'r')
+        for f in archive.namelist():
+            yield encode_bytes_to_utf8_str(archive.read(f))
 
 
 def yield_from_files(fnames: list, semaphore):
