@@ -9,4 +9,4 @@ pybind11>=2.6.2
 regex
 sentencepiece
 six
-transformers>=4.24.0
+transformers>=4.29.0

@@ -1,6 +1,7 @@
 # Suggested data paths when using GPT-NeoX locally
 {
   "data-path": "/mnt/e/datasets/music/lakh_midi_v0.1/tokenized/lmd_full_midi_document",
+  "split": "95,4,1",
 
   # or for weighted datasets:
   # "train-data-paths": ["data/enwik8/enwik8_text_document", "data/enwik8/enwik8_text_document"],
