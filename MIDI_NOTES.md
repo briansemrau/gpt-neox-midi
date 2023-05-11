@@ -104,3 +104,13 @@ python ./tools/upload.py
 # inference
 
 [midi_notebook.py](./midi_notebook.py)
+
+To automatically convert to MP3 using VLC:
+
+- install a soundfont into vlc (google it)
+- add VLC to your path
+
+then run:
+```sh
+vlc -I dummy --sout-audio --sout-keep --ttl=1 --sout "#transcode{acodec=mp3,ab=128}:std{access=file,mux=dummy,dst=output.mp3}" output.mid
+```
